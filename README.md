@@ -81,7 +81,7 @@ npm run preview
 
 **Supervisor por defecto:**
 - **Email**: `supervisor@example.com`
-- **Contraseña**: `SuperPass123!`
+- **Contraseña**: `Admin123.`
 
 ## 📦 Despliegue en Vercel
 
