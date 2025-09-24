@@ -257,7 +257,7 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
               </p>
               <p className="text-xs text-muted-foreground text-center">
                 Email: supervisor@example.com<br />
-                Contraseña: SuperPass123!
+                Contraseña: Admin123.
               </p>
             </div>
           </form>
