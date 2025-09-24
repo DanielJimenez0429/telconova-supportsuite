@@ -31,6 +31,7 @@ import {
 import { ZONES } from '@/lib/mockData';
 import type { Order } from '@/lib/mockData';
 import logoImage from '@/assets/logo.png';
+import { DarkModeToggle } from '@/components/DarkModeToggle';
 
 interface AsignacionesManualesProps {
   onSelectTechnician: (orderId: string) => void;
@@ -255,10 +256,10 @@ export const AsignacionesManuales: React.FC<AsignacionesManualesProps> = ({
           </Dialog>
         </div>
 
-        {/* Orders List */}
+        {/* Orders List - Split Layout */}
         {isLoading ? (
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {[1, 2, 3, 4, 5, 6].map(i => (
+          <div className="grid gap-4 md:grid-cols-2">
+            {[1, 2, 3, 4].map(i => (
               <div key={i} className="animate-pulse">
                 <Card>
                   <CardContent className="p-6">
@@ -302,69 +303,153 @@ export const AsignacionesManuales: React.FC<AsignacionesManualesProps> = ({
             )}
           </div>
         ) : (
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {filteredOrders.map(order => (
-              <Card key={order.id} className="animate-slide-in-up hover:shadow-lg transition-all duration-200">
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between">
-                    <CardTitle className="text-lg font-semibold text-primary">
-                      {order.id}
-                    </CardTitle>
-                    <Badge variant="zone">
-                      {order.zona}
-                    </Badge>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <h4 className="font-medium text-foreground mb-1">
-                      {order.servicio}
-                    </h4>
-                    <p className="text-sm text-muted-foreground line-clamp-2">
-                      {order.descripcion}
+          <div className="grid md:grid-cols-2 gap-6 h-[calc(100vh-280px)]">
+            {/* Pending Orders - Left Side */}
+            <div className="flex flex-col">
+              <div className="flex items-center gap-2 mb-4">
+                <UserX className="h-5 w-5 text-warning" />
+                <h3 className="text-lg font-semibold text-foreground">
+                  Órdenes Pendientes 
+                </h3>
+                <Badge variant="warning-light">
+                  {filteredOrders.filter(order => !order.assignedTo).length}
+                </Badge>
+              </div>
+              <div className="overflow-y-auto space-y-4 pr-2 flex-1" style={{scrollbarWidth: 'thin'}}>
+                {filteredOrders
+                  .filter(order => !order.assignedTo)
+                  .map(order => (
+                    <Card key={order.id} className="animate-slide-in-up hover:shadow-lg transition-all duration-200">
+                      <CardHeader className="pb-3">
+                        <div className="flex items-start justify-between">
+                          <CardTitle className="text-lg font-semibold text-primary">
+                            {order.id}
+                          </CardTitle>
+                          <Badge variant="zone">
+                            {order.zona}
+                          </Badge>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div>
+                          <h4 className="font-medium text-foreground mb-1">
+                            {order.servicio}
+                          </h4>
+                          <p className="text-sm text-muted-foreground line-clamp-2">
+                            {order.descripcion}
+                          </p>
+                        </div>
+
+                        <div className="space-y-2 text-sm">
+                          <div className="flex items-center gap-2 text-muted-foreground">
+                            <Calendar className="h-4 w-4" />
+                            <span>{formatDateTime(order.creadoEn)}</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-muted-foreground">
+                            <MapPin className="h-4 w-4" />
+                            <span className="capitalize">{order.zona}</span>
+                          </div>
+                        </div>
+
+                        <Button
+                          variant="accent"
+                          className="w-full"
+                          onClick={() => handleAssignTechnician(order.id)}
+                        >
+                          <UserX className="h-4 w-4 mr-2" />
+                          Asignar
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))
+                }
+                {filteredOrders.filter(order => !order.assignedTo).length === 0 && (
+                  <div className="text-center py-8">
+                    <UserCheck className="h-8 w-8 text-success mx-auto mb-2" />
+                    <p className="text-sm text-muted-foreground">
+                      No hay órdenes pendientes
                     </p>
                   </div>
+                )}
+              </div>
+            </div>
 
-                  <div className="space-y-2 text-sm">
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <Calendar className="h-4 w-4" />
-                      <span>{formatDateTime(order.creadoEn)}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <MapPin className="h-4 w-4" />
-                      <span className="capitalize">{order.zona}</span>
-                    </div>
+            {/* Assigned Orders - Right Side */}
+            <div className="flex flex-col">
+              <div className="flex items-center gap-2 mb-4">
+                <UserCheck className="h-5 w-5 text-success" />
+                <h3 className="text-lg font-semibold text-foreground">
+                  Órdenes Asignadas
+                </h3>
+                <Badge variant="success-light">
+                  {filteredOrders.filter(order => order.assignedTo).length}
+                </Badge>
+              </div>
+              <div className="overflow-y-auto space-y-4 pr-2 flex-1" style={{scrollbarWidth: 'thin'}}>
+                {filteredOrders
+                  .filter(order => order.assignedTo)
+                  .map(order => (
+                    <Card key={order.id} className="animate-slide-in-up hover:shadow-lg transition-all duration-200">
+                      <CardHeader className="pb-3">
+                        <div className="flex items-start justify-between">
+                          <CardTitle className="text-lg font-semibold text-primary">
+                            {order.id}
+                          </CardTitle>
+                          <Badge variant="zone">
+                            {order.zona}
+                          </Badge>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div>
+                          <h4 className="font-medium text-foreground mb-1">
+                            {order.servicio}
+                          </h4>
+                          <p className="text-sm text-muted-foreground line-clamp-2">
+                            {order.descripcion}
+                          </p>
+                        </div>
+
+                        <div className="space-y-2 text-sm">
+                          <div className="flex items-center gap-2 text-muted-foreground">
+                            <Calendar className="h-4 w-4" />
+                            <span>{formatDateTime(order.creadoEn)}</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-muted-foreground">
+                            <MapPin className="h-4 w-4" />
+                            <span className="capitalize">{order.zona}</span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2 p-2 bg-success-light rounded-md">
+                          <UserCheck className="h-4 w-4 text-success" />
+                          <span className="text-sm text-success font-medium">
+                            {getTechnicianName(order.assignedTo)}
+                          </span>
+                        </div>
+
+                        <Button
+                          variant="outline-accent"
+                          className="w-full"
+                          onClick={() => handleAssignTechnician(order.id)}
+                        >
+                          <User className="h-4 w-4 mr-2" />
+                          Reasignar
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))
+                }
+                {filteredOrders.filter(order => order.assignedTo).length === 0 && (
+                  <div className="text-center py-8">
+                    <UserX className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                    <p className="text-sm text-muted-foreground">
+                      No hay órdenes asignadas
+                    </p>
                   </div>
-
-                  {order.assignedTo && (
-                    <div className="flex items-center gap-2 p-2 bg-success-light rounded-md">
-                      <UserCheck className="h-4 w-4 text-success" />
-                      <span className="text-sm text-success font-medium">
-                        {getTechnicianName(order.assignedTo)}
-                      </span>
-                    </div>
-                  )}
-
-                  <Button
-                    variant={order.assignedTo ? "outline-accent" : "accent"}
-                    className="w-full"
-                    onClick={() => handleAssignTechnician(order.id)}
-                  >
-                    {order.assignedTo ? (
-                      <>
-                        <User className="h-4 w-4 mr-2" />
-                        Reasignar
-                      </>
-                    ) : (
-                      <>
-                        <UserX className="h-4 w-4 mr-2" />
-                        Asignar
-                      </>
-                    )}
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
+                )}
+              </div>
+            </div>
           </div>
         )}
       </>
@@ -389,9 +474,12 @@ export const AsignacionesManuales: React.FC<AsignacionesManualesProps> = ({
                 Sistema de Asignaciones
               </h1>
             </div>
-            <Button variant="outline" onClick={onLogout}>
-              Cerrar Sesión
-            </Button>
+            <div className="flex items-center gap-2">
+              <DarkModeToggle />
+              <Button variant="outline" onClick={onLogout}>
+                Cerrar Sesión
+              </Button>
+            </div>
           </div>
         </div>
       </header>

@@ -164,7 +164,7 @@ export const mockOrders: Order[] = [
 
 export const mockSupervisor: Supervisor = {
   email: "supervisor@example.com",
-  password: "SuperPass123!",
+  password: "Admin123.",
   nombre: "Supervisor TelcoNova"
 };
 

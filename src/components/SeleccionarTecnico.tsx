@@ -33,6 +33,8 @@ import {
 import { ZONES, SPECIALTIES, TIME_BLOCKS, type Technician } from '@/lib/mockData';
 import type { TechnicianFilters } from '@/lib/storage';
 import logoImage from '@/assets/logo.png';
+import { DarkModeToggle } from '@/components/DarkModeToggle';
+import { CreateTechnician } from '@/components/CreateTechnician';
 
 interface SeleccionarTecnicoProps {
   orderId: string;
@@ -273,6 +275,9 @@ export const SeleccionarTecnico: React.FC<SeleccionarTecnicoProps> = ({
                 </p>
               </div>
             </div>
+            <div className="flex items-center gap-2">
+              <DarkModeToggle />
+            </div>
           </div>
         </div>
       </header>
@@ -317,6 +322,11 @@ export const SeleccionarTecnico: React.FC<SeleccionarTecnicoProps> = ({
               />
             </div>
             <div className="flex gap-2">
+              <CreateTechnician onTechnicianCreated={() => {
+                // Refresh technicians list after creating a new one
+                const updatedTechnicians = filterTechnicians({ ...filters, searchQuery });
+                setTechnicians(updatedTechnicians);
+              }} />
               <Button
                 variant="outline"
                 onClick={() => setShowFilters(!showFilters)}

@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { attemptLogin, getAuthState, formatLockoutTime } from '@/lib/auth';
 import { useToastNotifications } from '@/components/ui/toast-container';
 import logoImage from '@/assets/logo.png';
+import { DarkModeToggle } from '@/components/DarkModeToggle';
 
 interface LoginProps {
   onLoginSuccess: () => void;
@@ -132,6 +133,11 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <ToastContainer />
+      
+      {/* Dark Mode Toggle - Fixed Position */}
+      <div className="fixed top-4 right-4 z-50">
+        <DarkModeToggle />
+      </div>
       
       {/* Background gradient */}
       <div className="absolute inset-0 gradient-primary gradient-animate opacity-5" />
