@@ -12,6 +12,17 @@ const badgeVariants = cva(
         secondary: "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
         destructive: "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
         outline: "text-foreground",
+        // TelcoNova specific variants
+        success: "border-transparent bg-success text-success-foreground",
+        warning: "border-transparent bg-warning text-warning-foreground",
+        accent: "border-transparent bg-accent text-accent-foreground",
+        "success-light": "border-success bg-success-light text-success",
+        "warning-light": "border-warning bg-warning-light text-warning",
+        "accent-light": "border-accent bg-accent/10 text-accent",
+        workload: "border-transparent bg-muted text-muted-foreground font-mono",
+        available: "border-transparent bg-success-light text-success font-medium",
+        unavailable: "border-transparent bg-destructive-light text-destructive font-medium",
+        zone: "border-accent bg-accent/10 text-accent font-medium",
       },
     },
     defaultVariants: {
