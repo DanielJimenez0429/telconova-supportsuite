@@ -54,8 +54,8 @@ TelcoNova Support Suite es una aplicación web moderna diseñada para la gestió
 
 ```bash
 # 1. Clonar el repositorio
-git clone <YOUR_GIT_URL>
-cd <YOUR_PROJECT_NAME>
+git clone https://github.com/DanielJimenez0429/telconova-supportsuite.git
+cd telconova-supportsuite
 
 # 2. Instalar dependencias
 npm install
@@ -64,7 +64,7 @@ npm install
 npm run dev
 
 # 4. Abrir en el navegador
-# La aplicación estará disponible en http://localhost:8080
+# La aplicación estará disponible en http://localhost:5173
 ```
 
 ### Para producción
