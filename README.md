@@ -64,7 +64,7 @@ npm install
 npm run dev
 
 # 4. Abrir en el navegador
-# La aplicación estará disponible en http://localhost:5173
+# La aplicación estará disponible en http://localhost:8080
 ```
 
 ### Para producción
